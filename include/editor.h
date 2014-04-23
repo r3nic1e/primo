@@ -13,6 +13,7 @@ public:
 	int closeFile();
 	int view();
 	int commandLoop();
+	int insertLoop(int cy, int cx);
 private:
 	void scrollUp(int cy, int cx);
 	void scrollDown(int cy, int cx);

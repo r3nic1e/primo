@@ -115,6 +115,9 @@ int Editor::commandLoop()
 			case KEY_RIGHT:
 				scrollRight(cy, cx);
 				break;
+			case 'i':
+				insertLoop(cy, cx);
+				break;
 			case 10:
 				return 0;
 			default:
@@ -122,4 +125,15 @@ int Editor::commandLoop()
 		}
 	}
 	return 0;
+}
+
+int Editor::insertLoop(int cy, int cx)
+{
+	while (true)
+	{
+		char c = wgetch(win);
+		if (c >= 'a' && c <= 'z') waddch(win, c);
+		if (c == 27) return 0;
+		wrefresh(win);
+	}
 }
