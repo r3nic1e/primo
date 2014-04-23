@@ -1,9 +1,10 @@
 #include <ncurses.h>
 #include <fstream>
-#include <iostream>
-#include <string>
 
 using namespace std;
+WINDOW *pad, *win;
+int my, mx;
+int y, x;
 
 fstream *openFile(char *filename)
 {
@@ -18,11 +19,10 @@ int printFile(fstream *file)
 	while (!file->eof())
 	{
 		file->getline(buffer, 256);
-		addstr(buffer);
+		waddstr(pad, buffer);
 		int x, y;
-		getyx(stdscr, y, x);
-		move(0, y + 1);
-		insdelln(1);
+		getyx(pad, y, x);
+		wmove(pad, y + 1, 0);
 	}
 	return 0;
 }
@@ -34,17 +34,49 @@ int closeFile(fstream *file)
 	return 0;
 }
 
+void commandLoop()
+{
+	while (true)
+	{
+		int c = wgetch(win);
+		switch (c)
+		{
+			case KEY_UP:
+				if (y > 0) copywin(pad, win, --y, x, 0, 0, my - 1, mx - 1, false);
+				wrefresh(win);
+				break;
+			case KEY_DOWN:
+				if (y < 256) copywin(pad, win, ++y, x, 0, 0, my - 1, mx - 1, false);
+				wrefresh(win);
+				break;
+			case 10:
+				return;
+			default:
+				break;
+		}
+	}
+}
+
 int main(int argc, char **argv)
 {
 	if (argc <= 1) return 0;
 	char *filename = argv[1];
 	fstream *file = openFile(filename);
 	initscr();
-	move(0, 0);
+	win = newwin(0, 0, 0, 0);
+	getmaxyx(win, my, mx);
+	pad = newpad(256, mx);
+	keypad(win, true);
+	scrollok(win, true);
+	noecho();
+	wmove(pad, 0, 0);
 	printFile(file);
-	refresh();
-	getch();
 	closeFile(file);
+	x = 0;
+	y = 1;
+	copywin(pad, win, y, x, 0, 0, my - 1, mx - 1, false);
+	wrefresh(win);
+	commandLoop();
 	endwin();
 	return 0;
 }
