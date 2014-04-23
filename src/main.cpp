@@ -48,7 +48,7 @@ void commandLoop()
 				wrefresh(win);
 				break;
 			case KEY_DOWN:
-				if (y < 256) copywin(pad, win, ++y, x, 0, 0, my - 1, mx - 1, false);
+				if (y < PADSIZE - 1) copywin(pad, win, ++y, x, 0, 0, my - 1, mx - 1, false);
 				wrefresh(win);
 				break;
 			case 10:
