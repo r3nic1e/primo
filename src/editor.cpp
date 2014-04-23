@@ -22,7 +22,11 @@ int Editor::openFile(char *filename)
 {
 	file = new fstream();
 	file->open(filename);
-	lines = 56;
+	lines = 0;
+	while (!file->eof())
+		if (file->get() == '\n') lines++;
+	file->close();
+	file->open(filename);
 	return 0;
 }
 
@@ -64,7 +68,7 @@ void Editor::scrollUp(int cy, int cx)
 void Editor::scrollDown(int cy, int cx)
 {
 	if (cy < my - 1) wmove(win, cy + 1, cx);
-	else if (y < lines - 1) copywin(pad, win, ++y, x, 0, 0, my - 1, mx - 1, false);
+	else if (y < lines - my) copywin(pad, win, ++y, x, 0, 0, my - 1, mx - 1, false);
 	wrefresh(win);
 }
 
