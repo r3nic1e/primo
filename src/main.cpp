@@ -1,6 +1,8 @@
 #include <ncurses.h>
 #include <fstream>
 
+#define PADSIZE 256
+
 using namespace std;
 WINDOW *pad, *win;
 int my, mx;
@@ -65,15 +67,14 @@ int main(int argc, char **argv)
 	initscr();
 	win = newwin(0, 0, 0, 0);
 	getmaxyx(win, my, mx);
-	pad = newpad(256, mx);
+	pad = newpad(PADSIZE, mx);
 	keypad(win, true);
 	scrollok(win, true);
 	noecho();
 	wmove(pad, 0, 0);
 	printFile(file);
 	closeFile(file);
-	x = 0;
-	y = 1;
+	y = x = 0;
 	copywin(pad, win, y, x, 0, 0, my - 1, mx - 1, false);
 	wrefresh(win);
 	commandLoop();
