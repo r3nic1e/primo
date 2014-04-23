@@ -1,5 +1,5 @@
 CC = g++
-CPPFLAGS = -Wall -c
+CPPFLAGS = -Wall -c -I../include
 LDFLAGS = -lncurses
 all: main
 main: main.o

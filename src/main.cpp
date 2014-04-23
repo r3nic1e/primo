@@ -1,7 +1,6 @@
 #include <ncurses.h>
 #include <fstream>
-
-#define PADSIZE 256
+#include <defines.h>
 
 using namespace std;
 WINDOW *pad, *win;
