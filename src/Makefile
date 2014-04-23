@@ -1,11 +1,13 @@
 CC = g++
 CPPFLAGS = -Wall -c -I../include
 LDFLAGS = -lncurses
-all: main
-main: main.o
-	$(CC) $(LDFLAGS) main.o -o main
-main.o: main.cpp
-	$(CC) $(CPPFLAGS) main.cpp -o main.o
+SOURCES = main.cpp editor.cpp
+OBJECTS = $(SOURCES:.cpp=.o)
+all: $(SOURCES) primo
+primo: $(OBJECTS)
+	$(CC) $(LDFLAGS) $(OBJECTS) -o primo
+.cpp.o:
+	$(CC) $(CPPFLAGS) $< -o $@
 clean:
-	rm main.o main
+	rm *.o primo
 .PHONY: clean

@@ -1,6 +1,7 @@
 #include <ncurses.h>
 #include <fstream>
 #include <defines.h>
+#include <editor.h>
 
 using namespace std;
 WINDOW *pad, *win;
@@ -35,48 +36,18 @@ int closeFile(fstream *file)
 	return 0;
 }
 
-void commandLoop()
-{
-	while (true)
-	{
-		int c = wgetch(win);
-		switch (c)
-		{
-			case KEY_UP:
-				if (y > 0) copywin(pad, win, --y, x, 0, 0, my - 1, mx - 1, false);
-				wrefresh(win);
-				break;
-			case KEY_DOWN:
-				if (y < PADSIZE - 1) copywin(pad, win, ++y, x, 0, 0, my - 1, mx - 1, false);
-				wrefresh(win);
-				break;
-			case 10:
-				return;
-			default:
-				break;
-		}
-	}
-}
 
 int main(int argc, char **argv)
 {
 	if (argc <= 1) return 0;
 	char *filename = argv[1];
-	fstream *file = openFile(filename);
 	initscr();
-	win = newwin(0, 0, 0, 0);
-	getmaxyx(win, my, mx);
-	pad = newpad(PADSIZE, mx);
-	keypad(win, true);
-	scrollok(win, true);
-	noecho();
-	wmove(pad, 0, 0);
-	printFile(file);
-	closeFile(file);
-	y = x = 0;
-	copywin(pad, win, y, x, 0, 0, my - 1, mx - 1, false);
-	wrefresh(win);
-	commandLoop();
+	Editor editor;
+	editor.openFile(filename);
+	editor.printFile();
+	editor.closeFile();
+	editor.view();
+	editor.commandLoop();
 	endwin();
 	return 0;
 }
