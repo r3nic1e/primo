@@ -1,7 +1,7 @@
 CC = g++
 CPPFLAGS = -Wall -c -I../include
 LDFLAGS = -lncurses
-SOURCES = main.cpp editor.cpp
+SOURCES = $(wildcard *.cpp)
 OBJECTS = $(SOURCES:.cpp=.o)
 all: $(SOURCES) primo
 primo: $(OBJECTS)

@@ -2,6 +2,7 @@
 #include <fstream>
 #include <defines.h>
 #include <editor.h>
+#include <buffer.h>
 
 using namespace std;
 WINDOW *pad, *win;
