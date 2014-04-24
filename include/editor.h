@@ -4,6 +4,8 @@
 #include <fstream>
 #include <ncurses.h>
 
+enum mode {COMMAND, INSERT, REPLACE};
+
 class Editor
 {
 public:
@@ -13,17 +15,21 @@ public:
 	int closeFile();
 	int view();
 	int commandLoop();
-	int insertLoop(int cy, int cx);
 private:
-	void scrollUp(int cy, int cx);
-	void scrollDown(int cy, int cx);
-	void scrollLeft(int cy, int cx);
-	void scrollRight(int cy, int cx);
+	void moveUp();
+	void moveDown();
+	void moveLeft();
+	void moveRight();
+	void setMode(mode m);
+
 	std::fstream* file;
 	WINDOW *pad, *win;
-	int my, mx;
+	WINDOW *status;
+	int ywin, xwin;
+	int ymax, xmax;
 	int y, x;
 	int lines;
+	mode currentMode;
 };
 
 #endif

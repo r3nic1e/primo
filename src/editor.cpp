@@ -7,15 +7,37 @@ using namespace std;
 
 Editor::Editor()
 {
-	win = newwin(0, 0, 0, 0);
-	getmaxyx(win, my, mx);
-	pad = newpad(PADSIZE, mx);
+	getmaxyx(stdscr, ymax, xmax);
+	win = newwin(ymax - 2, xmax, 0, 0);
+	getmaxyx(win, ywin, xwin);
+	pad = newpad(PADSIZE, xwin);
+	status = newwin(1, xmax, ymax - 1, 0);
 	keypad(win, true);
 	scrollok(win, true);
 	noecho();
 	wmove(pad, 0, 0);
 	wmove(win, 0, 0);
 	y = x = 0;
+	setMode(COMMAND);
+}
+
+void Editor::setMode(mode m)
+{
+	currentMode = m;
+	wclear(status);
+	switch (m)
+	{
+		case COMMAND:
+			wprintw(status, "Command");
+			break;
+		case INSERT:
+			wprintw(status, "Insert");
+			break;
+		case REPLACE:
+			wprintw(status, "Replace");
+			break;
+	}
+	wrefresh(status);
 }
 
 int Editor::openFile(char *filename)
@@ -53,42 +75,54 @@ int Editor::closeFile()
 
 int Editor::view()
 {
-	copywin(pad, win, y, x, 0, 0, my - 1, mx - 1, false);
+	copywin(pad, win, y, x, 0, 0, ywin - 1, xwin - 1, false);
 	wrefresh(win);
 	return 0;
 }
 
-void Editor::scrollUp(int cy, int cx)
+void Editor::moveUp()
 {
+	int cy, cx;
+	getyx(win, cy, cx);
 	if (cy > 0) wmove(win, cy - 1, cx);
-	else if (y > 0) copywin(pad, win, --y, x, 0, 0, my - 1, mx - 1, false);
+	else if (y > 0) copywin(pad, win, --y, x, 0, 0, ywin - 1, xwin - 1, false);
 	wrefresh(win);
 }
 
-void Editor::scrollDown(int cy, int cx)
+void Editor::moveDown()
 {
-	if (cy < my - 1) wmove(win, cy + 1, cx);
-	else if (y < lines - my) copywin(pad, win, ++y, x, 0, 0, my - 1, mx - 1, false);
+	int cy, cx;
+	getyx(win, cy, cx);
+	if (cy < ywin - 1) wmove(win, cy + 1, cx);
+	else if (y < lines - ywin) copywin(pad, win, ++y, x, 0, 0, ywin - 1, xwin - 1, false);
 	wrefresh(win);
 }
 
-void Editor::scrollLeft(int cy, int cx)
+void Editor::moveLeft()
 {
+	int cy, cx;
+	getyx(win, cy, cx);
 	if (cx > 0) wmove(win, cy, cx - 1);
 	else
 	{
-		scrollUp(cy, cx);
-		wmove(win, cy - 1, mx - 1);
+		moveUp();
+		wmove(win, cy - 1, xwin - 1);
 	}	
 	wrefresh(win);
 }
 
-void Editor::scrollRight(int cy, int cx)
+void Editor::moveRight()
 {
-	if (cx < mx - 1) wmove(win, cy, cx + 1);
+	int cy, cx;
+	getyx(win, cy, cx);
+	if (cx < xwin - 1)
+	{
+		if (winch(win) == ' ') wmove(win, cy, cx + 2);
+		else wmove(win, cy, cx + 1);
+	}
 	else
 	{
-		scrollDown(cy, cx);
+		moveDown();
 		wmove(win, cy + 1, 0);
 	}
 	wrefresh(win);
@@ -99,41 +133,34 @@ int Editor::commandLoop()
 	while (true)
 	{
 		int c = wgetch(win);
-		int cy, cx;
-		getyx(win, cy, cx);
 		switch (c)
 		{
 			case KEY_UP:
-				scrollUp(cy, cx);
+				moveUp();
 				break;
 			case KEY_DOWN:
-				scrollDown(cy, cx);
+				moveDown();
 				break;
 			case KEY_LEFT:
-				scrollLeft(cy, cx);
+				moveLeft();
 				break;
 			case KEY_RIGHT:
-				scrollRight(cy, cx);
+				moveRight();
 				break;
 			case 'i':
-				insertLoop(cy, cx);
+				setMode(INSERT);
 				break;
-			case 10:
+			case 'r':
+				setMode(REPLACE);
+				break;
+			case 27:
+				setMode(COMMAND);
+				break;
+			case 'q':
 				return 0;
 			default:
 				break;
 		}
 	}
 	return 0;
-}
-
-int Editor::insertLoop(int cy, int cx)
-{
-	while (true)
-	{
-		char c = wgetch(win);
-		if (c >= 'a' && c <= 'z') waddch(win, c);
-		if (c == 27) return 0;
-		wrefresh(win);
-	}
 }
