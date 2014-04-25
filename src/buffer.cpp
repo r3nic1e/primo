@@ -27,7 +27,7 @@ template <typename Data>
 void ListEntry<Data>::decreaseIndex()
 {
 	index--;
-	if (next) next-decreaseIndex();
+	if (next) next->decreaseIndex();
 }
 
 template <typename Data>
@@ -53,6 +53,16 @@ int List<Data>::addStart(Data d)
 }
 
 template <typename Data>
+int List<Data>::addIndex(unsigned index, Data d)
+{
+	ListEntry<Data> *temp = start;
+	for (unsigned i = 0; i < index - 1; i++)
+		temp = temp->next;
+        new ListEntry<Data>(temp, temp->next, d);
+        return 0;
+}
+
+template <typename Data>
 int List<Data>::addEnd(Data d)
 {
         end = new ListEntry<Data>(end, 0, d);
@@ -68,12 +78,12 @@ int List<Data>::f(int (*func)(Data))
 }
 
 template <typename Data>
-Data* List<Data>::operator [](unsigned i)
+Data List<Data>::operator [](unsigned i)
 {
-	Data *temp = start;
+	ListEntry<Data> *temp = start;
 	for (unsigned t = 0; t < i; t++)
 		temp = temp->next;
-	return temp;
+	return temp->data;
 }
 
 Buffer::Buffer()
@@ -82,20 +92,23 @@ Buffer::Buffer()
 
 int Buffer::addStart(char *str)
 {
-	return 0;
+	return lines.addStart(str);
 }
 
 int Buffer::addIndex(unsigned y, char *str)
 {
-	return 0;
+	return lines.addIndex(y, str);
 }
 
-int Buffer::addIndex(unsigned y, unsigned x, char str)
+int Buffer::addIndex(unsigned y, unsigned x, char c)
 {
+	lines[y][x] = c;
 	return 0;
 }
 
 int Buffer::addEnd(char *str)
 {
-	return 0;
+	return lines.addEnd(str);
 }
+
+template class ListEntry<char*>;
