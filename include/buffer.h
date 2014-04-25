@@ -23,6 +23,7 @@ public:
 	int addIndex(unsigned index, Data d);
 	int addEnd(Data d);
 	int f(int (*func)(Data));
+	Data* operator [](unsigned i);
 private:
 	ListEntry<Data> *start, *end;
 };
@@ -32,7 +33,8 @@ class Buffer
 public:
 	Buffer();
 	int addStart(char *str);
-	int addIndex(char *str);
+	int addIndex(unsigned y, char *str);
+	int addIndex(unsigned y, unsigned x, char str);
 	int addEnd(char *str);
 private:
 	List < List<char> > lines;

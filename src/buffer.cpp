@@ -67,18 +67,35 @@ int List<Data>::f(int (*func)(Data))
         return 0;
 }
 
+template <typename Data>
+Data* List<Data>::operator [](unsigned i)
+{
+	Data *temp = start;
+	for (unsigned t = 0; t < i; t++)
+		temp = temp->next;
+	return temp;
+}
+
 Buffer::Buffer()
 {
 }
 
 int Buffer::addStart(char *str)
 {
+	return 0;
 }
 
-int Buffer::addIndex(char *str)
+int Buffer::addIndex(unsigned y, char *str)
 {
+	return 0;
+}
+
+int Buffer::addIndex(unsigned y, unsigned x, char str)
+{
+	return 0;
 }
 
 int Buffer::addEnd(char *str)
 {
+	return 0;
 }
