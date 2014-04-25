@@ -3,8 +3,8 @@
 template <typename Data>
 ListEntry<Data>::ListEntry(ListEntry<Data> *p, ListEntry<Data> *n, Data d)
 {
-	if (p) p->next = &this;
-	if (n) n->previous = &this;
+	if (p) p->next = this;
+	if (n) n->previous = this;
 	previous = p;
 	next = n;
 	data = d;
@@ -45,8 +45,40 @@ List<Data>::List()
 }
 
 template <typename Data>
-int List<Data>::insertAfter(ListEntry<Data> *p, Data d)
+int List<Data>::addStart(Data d)
 {
-	new ListEntry<Data>(p, p->next, d);
-	return 0;
+        start = new ListEntry<Data>(0, start, d);
+        if (!end) end = start;
+        return 0;
+}
+
+template <typename Data>
+int List<Data>::addEnd(Data d)
+{
+        end = new ListEntry<Data>(end, 0, d);
+        if (!start) start = end;
+        return 0;
+}
+
+template <typename Data>
+int List<Data>::f(int (*func)(Data))
+{
+        start->f(func);
+        return 0;
+}
+
+Buffer::Buffer()
+{
+}
+
+int Buffer::addStart(char *str)
+{
+}
+
+int Buffer::addIndex(char *str)
+{
+}
+
+int Buffer::addEnd(char *str)
+{
 }

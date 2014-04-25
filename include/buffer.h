@@ -7,10 +7,10 @@ public:
 	ListEntry(ListEntry<Data> *p, ListEntry<Data> *n, Data d);
 	int f(int (*func)(Data));
 	Data data;
+	ListEntry<Data> *next, *previous;
 private:
 	unsigned index;
 protected:
-	ListEntry<Data> *next, *previous;
 	void increaseIndex();
 	void decreaseIndex();
 };
@@ -19,7 +19,10 @@ template <typename Data> class List
 {
 public:
 	List();
-	int insertAfter(ListEntry<Data> *p, Data d);
+	int addStart(Data d);
+	int addIndex(unsigned index, Data d);
+	int addEnd(Data d);
+	int f(int (*func)(Data));
 private:
 	ListEntry<Data> *start, *end;
 };
@@ -27,7 +30,12 @@ private:
 class Buffer
 {
 public:
+	Buffer();
+	int addStart(char *str);
+	int addIndex(char *str);
+	int addEnd(char *str);
 private:
+	List < List<char> > lines;
 };
 
 #endif
