@@ -54,9 +54,10 @@ int List<Data>::addStart(Data d)
 template <typename Data>
 int List<Data>::addIndex(unsigned index, Data d)
 {
+	if (!index) return addStart(d);
 	ListEntry<Data> *temp = start;
-	for (unsigned i = 0; i < index - 1; i++)
-		temp = temp->next;
+	for (unsigned i = index; i > 0; i--) temp = temp->next;
+	if (temp == end) return addEnd(d);
 	new ListEntry<Data>(temp, temp->next, d);
 	return 0;
 }
