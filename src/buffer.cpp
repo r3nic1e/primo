@@ -9,18 +9,16 @@ ListEntry<Data>::ListEntry(ListEntry<Data> *p, ListEntry<Data> *n, Data d)
 	previous = p;
 	next = n;
 	data = d;
-	if (p)
-	{
-		index = p->index + 1;
-		if (n) n->increaseIndex();
-	}
+	if (p) index = p->index + 1;
 	else index = 0;
+	if (n) n->increaseIndex();
 }
 
 template <typename Data>
 void ListEntry<Data>::increaseIndex()
 {
-	index++;
+	if (index) index++;
+	else index = previous->index + 1;
 	if (next) next->increaseIndex();
 }
 
