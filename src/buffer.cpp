@@ -119,3 +119,4 @@ int Buffer::invoke(int (*func)(ListEntry<char*>, void*), void* p)
 }
 
 template class ListEntry<char*>;
+template class ListEntry<void*>;

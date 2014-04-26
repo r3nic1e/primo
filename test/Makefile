@@ -1,8 +1,8 @@
-SOURCES = $(wildcard *.cpp)
+SOURCES = main.cpp buffer.cpp editor.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 CC = g++
 CPPFLAGS = -c -Iigloo -I../include
-LDFLAGS =
+LDFLAGS = -lncurses
 all: $(SOURCES) build-test test
 test:
 	./test
