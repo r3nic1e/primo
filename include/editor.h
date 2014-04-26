@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <ncurses.h>
+#include <buffer.h>
 
 enum mode {COMMAND, INSERT, REPLACE};
 
@@ -22,6 +23,7 @@ private:
 	void moveRight();
 	void setMode(mode m);
 
+	Buffer buf;
 	std::fstream* file;
 	WINDOW *pad, *win;
 	WINDOW *status;

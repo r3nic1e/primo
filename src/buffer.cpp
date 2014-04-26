@@ -1,4 +1,5 @@
 #include <buffer.h>
+#include <defines.h>
 
 template <typename Data>
 ListEntry<Data>::ListEntry(ListEntry<Data> *p, ListEntry<Data> *n, Data d)
@@ -31,25 +32,25 @@ void ListEntry<Data>::decreaseIndex()
 }
 
 template <typename Data>
-int ListEntry<Data>::f(int (*func)(Data))
+int ListEntry<Data>::invoke(int (*func)(ListEntry<Data>, void*), void* p)
 {
-	func(data);
-	if (next) next->f(func);
+	func(*this, p);
+	if (next) next->invoke(func, p);
 	return 0;
 }
 
 template <typename Data>
 List<Data>::List()
 {
-	start = end = 0;
+	start = end = NULL;
 }
 
 template <typename Data>
 int List<Data>::addStart(Data d)
 {
-        start = new ListEntry<Data>(0, start, d);
-        if (!end) end = start;
-        return 0;
+	start = new ListEntry<Data>(NULL, start, d);
+	if (!end) end = start;
+	return 0;
 }
 
 template <typename Data>
@@ -58,23 +59,24 @@ int List<Data>::addIndex(unsigned index, Data d)
 	ListEntry<Data> *temp = start;
 	for (unsigned i = 0; i < index - 1; i++)
 		temp = temp->next;
-        new ListEntry<Data>(temp, temp->next, d);
-        return 0;
+	new ListEntry<Data>(temp, temp->next, d);
+	return 0;
 }
 
 template <typename Data>
 int List<Data>::addEnd(Data d)
 {
-        end = new ListEntry<Data>(end, 0, d);
-        if (!start) start = end;
-        return 0;
+	ListEntry<Data> *temp = new ListEntry<Data>(end, NULL, d);
+	end = temp;
+	if (!start) start = end;
+	return 0;
 }
 
 template <typename Data>
-int List<Data>::f(int (*func)(Data))
+int List<Data>::invoke(int (*func)(ListEntry<Data>, void*), void* p)
 {
-        start->f(func);
-        return 0;
+	start->invoke(func, p);
+	return 0;
 }
 
 template <typename Data>
@@ -109,6 +111,11 @@ int Buffer::addIndex(unsigned y, unsigned x, char c)
 int Buffer::addEnd(char *str)
 {
 	return lines.addEnd(str);
+}
+
+int Buffer::invoke(int (*func)(ListEntry<char*>, void*), void* p)
+{
+	return lines.invoke(func, p);
 }
 
 template class ListEntry<char*>;

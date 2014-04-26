@@ -1,4 +1,5 @@
 #include <editor.h>
+#include <buffer.h>
 #include <defines.h>
 #include <fstream>
 #include <ncurses.h>
@@ -52,17 +53,30 @@ int Editor::openFile(char *filename)
 	return 0;
 }
 
+int addToWindow(ListEntry<char*> l, void* p)
+{
+	WINDOW *pad = (WINDOW*) p;
+	char* str = l.data;
+	waddstr(pad, str);
+	int y, x;
+	getyx(pad, y, x);
+	wmove(pad, y + 1, 0);
+	return 0;
+}
+
 int Editor::printFile()
 {
-	char buffer[256];
+	char str[256];
 	while (!file->eof())
 	{
-		file->getline(buffer, 256);
-		waddstr(pad, buffer);
+		file->getline(str, 256);
+		buf.addEnd(str);
+/*		waddstr(pad, buf);
 		int x, y;
 		getyx(pad, y, x);
 		wmove(pad, y + 1, 0);
-	}
+*/	}
+	buf.invoke(addToWindow, pad);
 	return 0;
 }
 

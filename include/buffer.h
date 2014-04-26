@@ -5,7 +5,7 @@ template <typename Data> class ListEntry
 {
 public:
 	ListEntry(ListEntry<Data> *p, ListEntry<Data> *n, Data d);
-	int f(int (*func)(Data));
+	int invoke(int (*func)(ListEntry<Data>, void*), void* p);
 	Data data;
 	ListEntry<Data> *next, *previous;
 private:
@@ -22,7 +22,7 @@ public:
 	int addStart(Data d);
 	int addIndex(unsigned index, Data d);
 	int addEnd(Data d);
-	int f(int (*func)(Data));
+	int invoke(int (*func)(ListEntry<Data>, void*), void* p);
 	Data operator [](unsigned i);
 private:
 	ListEntry<Data> *start, *end;
@@ -36,6 +36,7 @@ public:
 	int addIndex(unsigned y, char *str);
 	int addIndex(unsigned y, unsigned x, char c);
 	int addEnd(char *str);
+	int invoke(int (*func)(ListEntry<char*>, void*), void* p);
 private:
 	List<char*> lines;
 };
