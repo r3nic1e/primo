@@ -8,7 +8,6 @@ public:
 	int invoke(int (*func)(ListEntry<Data>, void*), void* p);
 	Data data;
 	ListEntry<Data> *next, *previous;
-private:
 	unsigned index;
 protected:
 	void increaseIndex();
@@ -24,7 +23,6 @@ public:
 	int addEnd(Data d);
 	int invoke(int (*func)(ListEntry<Data>, void*), void* p);
 	Data operator [](unsigned i);
-private:
 	ListEntry<Data> *start, *end;
 };
 
@@ -37,7 +35,6 @@ public:
 	int addIndex(unsigned y, unsigned x, char c);
 	int addEnd(char *str);
 	int invoke(int (*func)(ListEntry<char*>, void*), void* p);
-private:
 	List<char*> lines;
 };
 
