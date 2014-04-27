@@ -22,7 +22,7 @@ public:
 	int addIndex(unsigned index, Data d);
 	int addEnd(Data d);
 	int invoke(int (*func)(ListEntry<Data>, void*), void* p);
-	Data operator [](unsigned i);
+	ListEntry<Data> operator [](unsigned i);
 	ListEntry<Data> *start, *end;
 };
 

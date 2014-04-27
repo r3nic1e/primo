@@ -79,12 +79,12 @@ int List<Data>::invoke(int (*func)(ListEntry<Data>, void*), void* p)
 }
 
 template <typename Data>
-Data List<Data>::operator [](unsigned i)
+ListEntry<Data> List<Data>::operator [](unsigned i)
 {
 	ListEntry<Data> *temp = start;
 	for (unsigned t = 0; t < i; t++)
 		temp = temp->next;
-	return temp->data;
+	return *temp;
 }
 
 Buffer::Buffer()
@@ -103,7 +103,7 @@ int Buffer::addIndex(unsigned y, char *str)
 
 int Buffer::addIndex(unsigned y, unsigned x, char c)
 {
-	lines[y][x] = c;
+	lines[y].data[x] = c;
 	return 0;
 }
 
