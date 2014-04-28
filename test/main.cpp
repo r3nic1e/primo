@@ -7,22 +7,22 @@ Describe(A_ListEntry)
 {
 	It(is_inserted_between_two_NULLs)
 	{
-		ListEntry<void*> *le = new ListEntry<void*>(NULL, NULL, NULL);
+		ListEntry<int> *le = new ListEntry<int>(NULL, NULL, 0);
 		AssertThat(le->previous, Equals((void*) NULL));
 		AssertThat(le->next, Equals((void*) NULL));
 		AssertThat(le->index, Equals(0));
 	}
 	It(is_inserted_between_NULL_and_ListEntry)
 	{
-		ListEntry<void*> *second = new ListEntry<void*>(NULL, NULL, NULL);
-		ListEntry<void*> *first = new ListEntry<void*>(NULL, second, NULL);
+		ListEntry<int> *second = new ListEntry<int>(NULL, NULL, 0);
+		ListEntry<int> *first = new ListEntry<int>(NULL, second, 0);
 		AssertThat(first->previous, Equals((void*) NULL));
 		AssertThat(first->index, Equals(0));
 		AssertThat(first->next, Equals(second));
 		AssertThat(second->previous, Equals(first));
 		AssertThat(second->index, Equals(1));
 		AssertThat(second->next, Equals((void*) NULL));
-		ListEntry<void*> *third = new ListEntry<void*>(second, NULL, NULL);
+		ListEntry<int> *third = new ListEntry<int>(second, NULL, 0);
 		AssertThat(second->next, Equals(third));
 		AssertThat(third->previous, Equals(second));
 		AssertThat(third->index, Equals(2));
@@ -30,9 +30,9 @@ Describe(A_ListEntry)
 	}
 	It(is_inserted_between_two_ListEntrys)
 	{
-		ListEntry<void*> *first = new ListEntry<void*>(NULL, NULL, NULL);
-		ListEntry<void*> *third = new ListEntry<void*>(NULL, NULL, NULL);
-		ListEntry<void*> *second = new ListEntry<void*>(first, third, NULL);
+		ListEntry<int> *first = new ListEntry<int>(NULL, NULL, 0);
+		ListEntry<int> *third = new ListEntry<int>(NULL, NULL, 0);
+		ListEntry<int> *second = new ListEntry<int>(first, third, 0);
 		AssertThat(first->previous, Equals((void*) NULL));
 		AssertThat(first->index, Equals(0));
 		AssertThat(first->next, Equals(second));
@@ -45,9 +45,9 @@ Describe(A_ListEntry)
 	}
 	It(increases_index)
 	{
-		ListEntry<void*> *first = new ListEntry<void*>(NULL, NULL, NULL);
-		ListEntry<void*> *third = new ListEntry<void*>(NULL, NULL, NULL);
-		ListEntry<void*> *second = new ListEntry<void*>(first, third, NULL);
+		ListEntry<int> *first = new ListEntry<int>(NULL, NULL, 0);
+		ListEntry<int> *third = new ListEntry<int>(NULL, NULL, 0);
+		ListEntry<int> *second = new ListEntry<int>(first, third, 0);
 		AssertThat(first->index, Equals(0));
 		AssertThat(second->index, Equals(1));
 		AssertThat(third->index, Equals(2));
@@ -57,42 +57,42 @@ Describe(A_List)
 {
 	It(inserts_to_start)
 	{
-		List<void*> l;
-		l.addStart((void*) 1);
-		AssertThat(l.start->data, Equals((void*) 1));
+		List<int> l;
+		l.addStart(1);
+		AssertThat(l.start->data, Equals(1));
 		AssertThat(l.start->index, Equals(0));
 		AssertThat(l.start, Equals(l.end));
 	}
 	It(inserts_at_index)
 	{
-		List<void*> l;
-		l.addStart(NULL);
-		l.addEnd(NULL);
-		l.addIndex(1, (void*) 1);
-		AssertThat(l.end->data, Equals((void*) 1));
-		l.addIndex(1, (void*) 2);
-		AssertThat(l.end->data, Equals((void*) 1));
+		List<int> l;
+		l.addStart(0);
+		l.addEnd(0);
+		l.addIndex(1, 1);
+		AssertThat(l.end->data, Equals(1));
+		l.addIndex(1, 2);
+		AssertThat(l.end->data, Equals(1));
 	}
 	It(inserts_to_end)
 	{
-		List<void*> l;
-		l.addEnd((void*) 1);
-		AssertThat(l.end->data, Equals((void*) 1));
+		List<int> l;
+		l.addEnd(1);
+		AssertThat(l.end->data, Equals(1));
 		AssertThat(l.end->index, Equals(0));
 		AssertThat(l.end, Equals(l.start));
-		l.addEnd((void*) 2);
-		AssertThat(l.end->data, Equals((void*) 2));
+		l.addEnd(2);
+		AssertThat(l.end->data, Equals(2));
 		AssertThat(l.end->index, Equals(1));
 	}
 	It(select_a_ListEntry_by_index)
 	{
-		List<void*> l;
-		l.addEnd((void*) 0);
-		l.addEnd((void*) 1);
-		l.addEnd((void*) 2);
-		AssertThat(l[0].data, Equals((void*) 0));
-		AssertThat(l[1].data, Equals((void*) 1));
-		AssertThat(l[2].data, Equals((void*) 2));
+		List<int> l;
+		l.addEnd(0);
+		l.addEnd(1);
+		l.addEnd(2);
+		AssertThat(l[0].data, Equals(0));
+		AssertThat(l[1].data, Equals(1));
+		AssertThat(l[2].data, Equals(2));
 	}
 };
 
