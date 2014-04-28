@@ -90,9 +90,9 @@ Describe(A_List)
 		l.addEnd((void*) 0);
 		l.addEnd((void*) 1);
 		l.addEnd((void*) 2);
-		AssertThat(l[0], Equals((void*) 0));
-		AssertThat(l[1], Equals((void*) 1));
-		AssertThat(l[2], Equals((void*) 2));
+		AssertThat(l[0].data, Equals((void*) 0));
+		AssertThat(l[1].data, Equals((void*) 1));
+		AssertThat(l[2].data, Equals((void*) 2));
 	}
 };
 
