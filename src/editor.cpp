@@ -53,11 +53,11 @@ int Editor::openFile(char *filename)
 	return 0;
 }
 
-int addToWindow(ListEntry<char*> l, void* p)
+int addToWindow(ListEntry<string> l, void* p)
 {
 	WINDOW *pad = (WINDOW*) p;
-	char* str = l.data;
-	waddstr(pad, str);
+	string str = l.data;
+	waddstr(pad, str.c_str());
 	int y, x;
 	getyx(pad, y, x);
 	wmove(pad, y + 1, 0);
@@ -70,7 +70,7 @@ int Editor::printFile()
 	while (!file->eof())
 	{
 		file->getline(str, 256);
-		buf.addEnd(str);
+		buf.addEnd(string(str));
 /*		waddstr(pad, buf);
 		int x, y;
 		getyx(pad, y, x);

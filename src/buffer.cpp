@@ -1,5 +1,6 @@
 #include <buffer.h>
 #include <defines.h>
+#include <string>
 
 template <typename Data>
 ListEntry<Data>::ListEntry(ListEntry<Data> *p, ListEntry<Data> *n, Data d)
@@ -91,33 +92,27 @@ Buffer::Buffer()
 {
 }
 
-int Buffer::addStart(char *str)
+int Buffer::addStart(std::string str)
 {
 	return lines.addStart(str);
 }
 
-int Buffer::addIndex(unsigned y, char *str)
+int Buffer::addIndex(unsigned y, std::string str)
 {
 	return lines.addIndex(y, str);
 }
 
-int Buffer::addIndex(unsigned y, unsigned x, char c)
-{
-	lines[y].data[x] = c;
-	return 0;
-}
-
-int Buffer::addEnd(char *str)
+int Buffer::addEnd(std::string str)
 {
 	return lines.addEnd(str);
 }
 
-int Buffer::invoke(int (*func)(ListEntry<char*>, void*), void* p)
+int Buffer::invoke(int (*func)(ListEntry<std::string>, void*), void* p)
 {
 	return lines.invoke(func, p);
 }
 
-template class ListEntry<char*>;
+template class ListEntry<std::string>;
 template class ListEntry<int>;
-template class List<char*>;
+template class List<std::string>;
 template class List<int>;

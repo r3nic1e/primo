@@ -1,6 +1,8 @@
 #ifndef BUFFER_H
 #define BUFFER_H
 
+#include <string>
+
 template <typename Data> class ListEntry
 {
 public:
@@ -30,12 +32,11 @@ class Buffer
 {
 public:
 	Buffer();
-	int addStart(char *str);
-	int addIndex(unsigned y, char *str);
-	int addIndex(unsigned y, unsigned x, char c);
-	int addEnd(char *str);
-	int invoke(int (*func)(ListEntry<char*>, void*), void* p);
-	List<char*> lines;
+	int addStart(std::string str);
+	int addIndex(unsigned y, std::string str);
+	int addEnd(std::string str);
+	int invoke(int (*func)(ListEntry<std::string>, void*), void* p);
+	List<std::string> lines;
 };
 
 #endif
