@@ -12,9 +12,10 @@ class Editor
 public:
 	Editor();
 	int openFile(char *filename);
-	int printFile();
+	int readFile();
 	int closeFile();
 	int view();
+	int view(unsigned y);
 	int commandLoop();
 private:
 	void moveUp();
@@ -25,7 +26,7 @@ private:
 
 	Buffer buf;
 	std::fstream* file;
-	WINDOW *pad, *win;
+	WINDOW *win;
 	WINDOW *status;
 	int ywin, xwin;
 	int ymax, xmax;

@@ -39,6 +39,15 @@ int ListEntry<Data>::invoke(int (*func)(ListEntry<Data>, void*), void* p)
 }
 
 template <typename Data>
+int ListEntry<Data>::invoke(int (*func)(ListEntry<Data>, void*), unsigned count, void* p)
+{
+	if (!count) return 1;
+	func(*this, p);
+	if (next) next->invoke(func, count - 1, p);
+	return 0;
+}
+
+template <typename Data>
 List<Data>::List()
 {
 	start = end = NULL;
@@ -80,12 +89,28 @@ int List<Data>::invoke(int (*func)(ListEntry<Data>, void*), void* p)
 }
 
 template <typename Data>
-ListEntry<Data> List<Data>::operator [](unsigned i)
+int List<Data>::invoke(int (*func)(ListEntry<Data>, void*), unsigned st, void* p)
+{
+	ListEntry<Data> *s = (*this)[st];
+	s->invoke(func, p);
+	return 0;
+}
+
+template <typename Data>
+int List<Data>::invoke(int (*func)(ListEntry<Data>, void*), unsigned st, unsigned count, void* p)
+{
+	ListEntry<Data> *s = (*this)[st];
+	s->invoke(func, count, p);
+	return 0;
+}
+
+template <typename Data>
+ListEntry<Data>* List<Data>::operator [](unsigned i)
 {
 	ListEntry<Data> *temp = start;
 	for (unsigned t = 0; t < i; t++)
 		temp = temp->next;
-	return *temp;
+	return temp;
 }
 
 Buffer::Buffer()
@@ -110,6 +135,16 @@ int Buffer::addEnd(std::string str)
 int Buffer::invoke(int (*func)(ListEntry<std::string>, void*), void* p)
 {
 	return lines.invoke(func, p);
+}
+
+int Buffer::invoke(int (*func)(ListEntry<std::string>, void*), unsigned start, void* p)
+{
+	return lines.invoke(func, start, p);
+}
+
+int Buffer::invoke(int (*func)(ListEntry<std::string>, void*), unsigned start, unsigned count, void* p)
+{
+	return lines.invoke(func, start, count, p);
 }
 
 template class ListEntry<std::string>;

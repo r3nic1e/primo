@@ -5,38 +5,6 @@
 #include <buffer.h>
 
 using namespace std;
-WINDOW *pad, *win;
-int my, mx;
-int y, x;
-
-fstream *openFile(char *filename)
-{
-	fstream *file = new fstream;
-	file->open(filename);
-	return file;
-}
-
-int printFile(fstream *file)
-{
-	char buffer[256];
-	while (!file->eof())
-	{
-		file->getline(buffer, 256);
-		waddstr(pad, buffer);
-		int x, y;
-		getyx(pad, y, x);
-		wmove(pad, y + 1, 0);
-	}
-	return 0;
-}
-
-int closeFile(fstream *file)
-{
-	file->close();
-	delete file;
-	return 0;
-}
-
 
 int main(int argc, char **argv)
 {
@@ -45,9 +13,9 @@ int main(int argc, char **argv)
 	initscr();
 	Editor editor;
 	editor.openFile(filename);
-	editor.printFile();
+	editor.readFile();
 	editor.closeFile();
-	editor.view();
+	editor.view(0);
 	editor.commandLoop();
 	endwin();
 	return 0;
